@@ -1,0 +1,1208 @@
+\documentclass[10pt,a4paper,oneside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{stmaryrd}
+\usepackage{cmll}
+\usepackage{mathrsfs}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm,bindingoffset=0cm]{geometry}
+\usepackage{proof}
+\usepackage{tikz}
+\usepackage{multicol}
+\usepackage{mathabx}
+\usepackage{comment}
+\usepackage{hyperref}
+\usepackage[normalem]{ulem}
+
+\makeatletter
+\newcommand{\dotminus}{\mathbin{\text{\@dotminus}}}
+
+\newcommand{\@dotminus}{%
+  \ooalign{\hidewidth\raise1ex\hbox{.}\hidewidth\cr$\m@th-$\cr}%
+}
+\makeatother
+
+\usetikzlibrary{arrows,backgrounds,patterns,matrix,shapes,fit,calc,shadows,plotmarks}
+
+\newtheorem{definition}{Определение}
+\newtheorem{theorem}{Теорема}
+\begin{document}
+
+\begin{center}{\Large\textsc{\textbf{Теоретические домашние задания}}}\\
+             \it Математическая логика, ИТМО, М3232-М3239, осень 2023 года\end{center}
+
+\section*{Задание №1. Знакомство с исчислением высказываний.}
+
+Справочное изложение теории, частично разобранной на лекции.
+
+\begin{definition}
+Аксиомой является любая формула исчисления высказываний, которая может быть получена из следующих схем аксиом:
+
+\begin{tabular}{ll}
+(1) & $\alpha \rightarrow \beta \rightarrow \alpha$ \\
+(2) & $(\alpha \rightarrow \beta) \rightarrow (\alpha \rightarrow \beta \rightarrow \gamma) \rightarrow (\alpha \rightarrow \gamma)$ \\
+(3) & $\alpha \rightarrow \beta \rightarrow \alpha \& \beta$\\
+(4) & $\alpha \& \beta \rightarrow \alpha$\\
+(5) & $\alpha \& \beta \rightarrow \beta$\\
+(6) & $\alpha \rightarrow \alpha \vee \beta$\\
+(7) & $\beta \rightarrow \alpha \vee \beta$\\
+(8) & $(\alpha \rightarrow \gamma) \rightarrow (\beta \rightarrow \gamma) \rightarrow (\alpha \vee \beta \rightarrow \gamma)$\\
+(9) & $(\alpha \rightarrow \beta) \rightarrow (\alpha \rightarrow \neg \beta) \rightarrow \neg \alpha$\\
+(10) & $\neg \neg \alpha \rightarrow \alpha$
+\end{tabular}
+\end{definition}
+
+\begin{definition}
+Выводом из гипотез $\gamma_1,\dots,\gamma_n$ назовём конечную непустую последовательность высказываний $\delta_1, \dots, \delta_t$, для каждого из которых
+выполнено хотя бы что-то из списка:
+\begin{enumerate}
+\item высказывание является аксиомой;
+\item высказывание получается из предыдущих по правилу Modus Ponens (то есть, для высказывания $\delta_i$ найдутся
+такие $\delta_j$ и $\delta_k$, что $j,k < i$ и $\delta_k \equiv \delta_j \rightarrow \delta_i$);
+\item высказывание является гипотезой (то есть, является одной из формул $\gamma_1,\dots,\gamma_n$).
+\end{enumerate}
+\end{definition}
+
+\begin{definition}
+Будем говорить, что формула $\alpha$ выводится (доказывается) из гипотез $\gamma_1,\dots,\gamma_n$ 
+(и записывать это как $\gamma_1,\dots,\gamma_n\vdash\alpha$), если существует такой вывод
+из гипотез $\gamma_1,\dots,\gamma_n$, что последней формулой которого является формула $\alpha$.
+\end{definition}
+
+Заметим, что доказательство формулы $\alpha$ --- это вывод формулы $\alpha$ из
+пустого множества гипотез.
+
+При решении заданий вам может потребоваться теорема о дедукции (будет доказана на второй лекции): 
+\begin{theorem}
+$\gamma_1,\dots,\gamma_n, \alpha \vdash \beta$ 
+тогда и только тогда, когда $\gamma_1,\dots,\gamma_n \vdash \alpha\rightarrow\beta$. 
+\end{theorem}
+
+Пример использования: пусть необходимо доказать $\vdash A \rightarrow A$ --- то есть
+доказать существование вывода формулы $A \rightarrow A$ (заметьте, так поставленное
+условие не требует этот вывод предъявлять, только доказать его существование).
+Тогда заметим, что последовательность из одной формулы $A$ доказывает $A \vdash A$. 
+Далее, по теореме о дедукции, отсюда следует и $\vdash A \rightarrow A$ 
+(то есть, вывода формулы $A \rightarrow A$, не использующего гипотезы).
+
+\begin{enumerate}
+\item Докажите:
+\begin{enumerate}
+\item $\vdash (A \rightarrow A \rightarrow B) \rightarrow (A \rightarrow B)$
+\item $\vdash \neg (A \with \neg A)$
+\item $\vdash A \with B \rightarrow B \with A$
+\item $\vdash A \vee B \rightarrow B \vee A$
+\item $A \with \neg A \vdash B$
+\end{enumerate}
+
+\item Докажите:
+\begin{enumerate}
+\item $\vdash A \rightarrow \neg \neg A$
+\item $\neg A, B \vdash \neg(A\& B)$
+\item $\neg A,\neg B \vdash \neg( A\vee B)$
+\item $ A,\neg B \vdash \neg( A\rightarrow B)$
+\item $\neg A, B \vdash  A\rightarrow B$
+\end{enumerate}
+
+\item Докажите:
+\begin{enumerate}
+\item $\vdash (A \rightarrow B) \rightarrow (B \rightarrow C) \rightarrow (A \rightarrow C)$ 
+\item $\vdash (A \rightarrow B) \rightarrow (\neg B \rightarrow \neg A)$ \emph{(правило контрапозиции)}
+\item $\vdash \neg (\neg A \with \neg B) \rightarrow (A \vee B)$ \emph{(вариант I закона де Моргана)}
+\item $\vdash (\neg A \vee \neg B) \rightarrow \neg (A \with B)$ \emph{(II закон де Моргана)}
+\item $\vdash (A \rightarrow B) \rightarrow (\neg A \vee B)$
+\item $\vdash A \with B \rightarrow A \vee B$
+\item $\vdash ((A \rightarrow B) \rightarrow A)\rightarrow A$ \emph{(закон Пирса)}
+\item $\vdash A \vee \neg A$
+\item $\vdash (A \with B \rightarrow C) \rightarrow (A \rightarrow B \rightarrow C)$
+\item $\vdash (A \rightarrow B \rightarrow C) \rightarrow (A \with B \rightarrow C)$
+\item $\vdash (A \rightarrow B) \vee (B \rightarrow A)$
+\item $\vdash (A \rightarrow B) \vee (B \rightarrow C) \vee (C \rightarrow A)$
+\end{enumerate}
+
+\item Даны высказывания $\alpha$ и $\beta$, причём $\vdash \alpha\rightarrow\beta$ и $\not\vdash\beta\rightarrow\alpha$. 
+Укажите способ построения высказывания $\gamma$, такого, что
+$\vdash\alpha\rightarrow\gamma$ и $\vdash\gamma\rightarrow\beta$, причём $\not\vdash\gamma\rightarrow\alpha$ и
+$\not\vdash\beta\rightarrow\gamma$.
+
+\item Покажите, что если $\alpha \vdash \beta$ и $\neg\alpha\vdash\beta$, то $\vdash\beta$.
+\end{enumerate}
+
+\section*{Задание №2. Теоремы об исчислении высказываний. Знакомство с интуиционистским исчислением высказываний.}
+\begin{enumerate}
+\item (только для очной практики) На память приведите греческий алфавит --- запишите на доске в алфавитном порядке все большие и маленькие
+греческие буквы и назовите их.
+\item Давайте вспомним, что импликация правоассоциативна: $\alpha\rightarrow\beta\rightarrow\gamma \equiv \alpha\rightarrow(\beta\rightarrow\gamma)$.
+Но рассмотрим иную расстановку скобок: $(\alpha\rightarrow\beta)\rightarrow\gamma$. Возможно ли доказать логическое следствие
+между этими вариантами расстановки скобок --- и каково его направление?
+\item Покажите, что в классическом исчислении высказываний $\Gamma \models \alpha$ влечёт $\Gamma \vdash \alpha$.
+\item Покажите, что в классическом исчислении высказываний $\Gamma \vdash \alpha$ влечёт $\Gamma \models \alpha$.
+\item Возможно ли, что какая-то из аксиом задаётся двумя разными схемами аксиом? Опишите все возможные коллизии, если они есть.
+Ответ обоснуйте (да, тут потребуется доказательство по индукции).
+
+\item Заметим, что можно вместо отрицания ввести в исчисление ложь. Рассмотрим \emph{исчисление высказываний с ложью}.
+В этом языке будет отсутствовать одноместная связка $(\neg)$, вместо неё будет присутствовать нульместная
+связка <<ложь>> $(\bot)$, а 9 и 10 схемы аксиом будут заменены на одну схему:
+
+\begin{tabular}{ll}
+$(9_\bot)$ & $((\alpha\rightarrow\bot)\rightarrow\bot)\rightarrow\alpha$
+\end{tabular}
+
+Будем записывать доказуемость в новом исчислении как $\vdash_\bot \alpha$, а доказуемость в исчислении высказываний
+с отрицанием как $\vdash_\neg \beta$. Также определим операцию трансляции между языками обычного исчисления высказываний и исчисления с ложью
+как операции рекурсивной замены $\bot := A \with \neg A$ и $\neg \alpha := \alpha \rightarrow \bot$ (и обозначим их
+как $|\varphi|_\neg$ и $|\psi|_\bot$ соответственно).
+
+Докажите:
+\begin{enumerate}
+\item $\vdash_\bot \alpha$ влечёт $\vdash_\neg |\alpha|_\neg$
+\item $\vdash_\neg \alpha$ влечёт $\vdash_\bot |\alpha|_\bot$
+\end{enumerate}
+
+\item Изоморфизм Карри-Ховарда --- соответствие между логическими исчислениями (например, исчислением высказываний), с одной стороны, и 
+языками программирования, с другой. А именно, можно заметить, что программа соответствует доказательству, тип программы --- 
+логическому высказыванию. Связки (как составные части логического высказывания) соответствуют определённым типовым конструкциям:
+функция --- импликации, конъюнкция --- упорядоченной паре, дизъюнкция --- алгебраическому типу (\verb!std::variant! и т.п.).
+Атомарным высказываниям мы сопоставим элементарные типы. Понятие же доказуемости превращается в \emph{обитаемость} типа.
+Например, доказать обитаемость типа \verb!int! возможно, предъявив значение этого типа: \verb!5!.
+
+Функция \verb!A id(A x) { return x; }! доказывает $A \rightarrow A$, а функция 
+\begin{verbatim}
+std::pair<A,B> swap(std::pair<B,A> x) { return std::pair(x.second, x.first); }
+\end{verbatim}
+доказывает $B\with A \rightarrow A \with B$. В самом деле, данные функции являются элементами соответствующих
+типов, поэтому их можно понимать как доказательства соответствующих типам логических выражений.
+
+Ложь --- это необитаемый тип; тип, не имеющий значений. В некоторых языках такие типы можно выписать
+явно. Например, в Хаскеле можно построить алгебраический тип без конструкторов:
+
+\begin{verbatim}
+data False
+main = do print "Hi"
+\end{verbatim}
+
+В других (например, в C++) эти значения можно сымитировать. Например, в одних случаях сделать параметром темплейта.
+Тогда, если мы никаких ограничений на этот параметр не делаем, кто-то мог бы подставить и необитаемый тип вместо этого параметра:
+
+\begin{verbatim}
+template <class Bot>
+Bot (*contraposition (A a)) (A a, B b, Bot (*neg_b) (B));
+\end{verbatim}
+
+В самом деле, $(A \rightarrow B) \rightarrow ((B \rightarrow \bot) \rightarrow (A \rightarrow \bot))$ есть частный
+случай высказывания $(A \rightarrow B) \rightarrow ((B \rightarrow \alpha) \rightarrow (A \rightarrow \alpha))$, 
+которое тоже можно доказать при всех $\alpha$.
+
+В некоторых случаях можно воспользоваться конструкцией, не возвращающей управления, которая \emph{понятна компилятору}. Например, 
+можно так задать правило удаления лжи ($\bot\rightarrow A$):
+
+\begin{verbatim}
+template <class Bot>
+A remove_bot(Bot x) { throw x; }
+
+int a = remove_bot<int> (...);
+char* b = remove_bot<char*> (...);
+char(*c)() = remove_bot<char(*)()> (...);
+\end{verbatim}
+
+В завершение теоретической части заметим, что 
+\begin{itemize}
+\item логика, которая получится, если мы будем играть в эту игру честно --- это уже будет не классическая логика; для неё не будут справедливы все
+схемы аксиом, 10 схема будет нарушаться;
+\item большинство языков программирования противоречивы в смысле логической теории; в частности, там можно доказать ложь.
+Но для того, чтобы это получилось, вам обычно требуется использовать либо инструменты обхода ограничений типовой системы
+(например, явные приведения типов), либо конструкции, не возвращающие управления: бесконечная рекурсия, исключения и т.п.
+\end{itemize}
+
+Докажите следующие утверждения, написав соответствующую программу на выбранном вами языке программирования,
+не используя противоречивости его типовой системы (кроме последнего задания). В случае C++ можно также
+использовать правило удаления лжи, указанное выше; для других языков при необходимости можно выделить какое-то похожее правило:
+\begin{enumerate}
+\item $A \rightarrow B \rightarrow A$
+\item $A \with B \rightarrow A \vee B$
+\item $(A \with (B \vee C)) \rightarrow ((A \with B) \vee (A \with C))$
+\item $(A \rightarrow C) \with (B \rightarrow C) \with (A \vee B) \rightarrow C$
+\item $(B \vee C \rightarrow A) \rightarrow (B \rightarrow A) \with (C \rightarrow A)$
+\item $(A \rightarrow B) \rightarrow (\neg B \rightarrow \neg A)$
+\item $((A \rightarrow B) \rightarrow C) \rightarrow (A \rightarrow (B \rightarrow C))$
+\item $(A \rightarrow B) \with (A \rightarrow \neg B) \rightarrow \neg A$
+\item $(A \rightarrow B \rightarrow C) \rightarrow ((A \with B) \rightarrow C)$
+\item $\neg (A \vee B) \rightarrow (\neg A \with \neg B)$ и $(\neg A \with \neg B) \rightarrow \neg (A \vee B)$
+\item Одно из двух утверждений: $(A \rightarrow B) \rightarrow \neg A \vee B$ или
+$\neg A \vee B \rightarrow (A \rightarrow B)$. Сразу заметим, что оставшееся утверждение доказать
+без использования противоречивости языка не получится.
+\item $\bot$ (любым доступным в языке способом)
+\end{enumerate}
+
+Для зачёта по пункту условия требуется написать код программы и продемонстрировать его работу на компьютере.
+Если вы желаете получить дополнительные 0.5 балла за оформление в Тех-е, вам потребуется оформить в Тех-е 
+исходный код программы (подсказка: для языков программирования могут существовать специальные пакеты
+для красивого оформления кода).
+
+\end{enumerate}
+
+\section*{Задание №3. Топология, решётки.}
+
+\begin{enumerate}
+\item Напомним определения: \emph{замкнутое} множество --- такое, дополнение которого открыто.
+\emph{Внутренностью} множества $A^\circ$ назовём наибольшее открытое множество, содержащееся в $A$.
+\emph{Замыканием} множества $\overline{A}$ назовём наименьшее замкнутое множество, содержащее $A$.
+Назовём \emph{окрестностью} точки $x$ такое открытое множество $V$, что $x \in V$.
+Будем говорить, что точка $x \in A$ \emph{внутренняя}, если существует окрестность $V$, что $V \subseteq A$.
+Точка $x$ --- \emph{граничная}, если любая её окрестность $V$ пересекается как с $A$, так и с его дополнением.
+\begin{enumerate}
+\item (i) Покажите, что $A$ открыто тогда и только тогда, когда все точки $A$ --- внутренние.
+Также покажите, что $A^\circ = \{ x|x \in A \with x\text{ --- внутренняя точка}\}$;
+(ii) Покажите, что $A$ замкнуто тогда и только когда, когда содержит все свои граничные точки.
+Также покажите, что $\overline{A} = \{ x\ |\ x\text{ --- внутренняя или граничная точка}\}$.
+(iii) Верно ли, что $\overline{A} = X \setminus ((X\setminus A)^\circ)$?
+\item Пусть $A \subseteq B$. Как связаны $A^\circ$ и $B^\circ$, а также $\overline{A}$ и $\overline{B}$?
+ Верно ли $(A \cap B)^\circ = A^\circ \cap B^\circ$ и $(A \cup B)^\circ = A^\circ \cup B^\circ$?
+\item \emph{Задача Куратовского.} Будем применять операции взятия внутренности и замыкания к некоторому множеству
+всевозможными способами. Сколько различных множеств может всего получиться?
+\emph{Указание.} Покажите, что $\overline{\left(\overline{A^\circ}\right)^\circ} = \overline{A^\circ}$.
+\end{enumerate}
+
+
+\item Напомним, что евклидовой топологией называется топология на $\mathbb{R}$ с базой $\mathcal{B} = \{ (a,b)\ |\ a,b \in \mathbb{R} \}$.
+Связны ли $\mathbb{Q}$ и $\mathbb{R}\setminus\mathbb{Q}$ как топологические подпространства $\mathbb{R}$?
+
+%\item Если для некоторой функции каждый прообраз открытого множества открыт, то такая функция называется \emph{непрерывной}.
+%Покажите, что в эвклидовой топологии функция $f : \mathbb{R} \rightarrow \mathbb{R}$ непрерывна тогда и только тогда,
+%когда $\forall x_0 \in \mathbb{R}.\forall \varepsilon > 0. \exists \delta > 0. \forall x \in \mathbb{R}.|x - x_0| < \delta \rightarrow |f(x) - f(x_0)| < \varepsilon$.
+
+\item Примеры топологий.
+Для каждого из примеров ниже проверьте, задано ли в нём топологическое пространство, и ответьте на следующие вопросы, если это так:
+(а) каковы окрестности точек в данной топологии;
+(б) каковы замкнутые множества в данной топологии;
+(в) связно ли данное пространство.
+
+Единица оценивания в этой задаче --- ответ на все вопросы, приведённые выше, для одной из топологий:
+
+\begin{enumerate}
+\item Топология Зарисского на $\mathbb{R}$: 
+$\Omega = \{\varnothing\} \cup \{ X \subseteq \mathbb{R}\ |\ \mathbb{R} \setminus X\ \text{конечно} \}$,
+то есть пустое множество и все множества с конечным дополнением.
+\item Множество всех бесконечных подмножеств $\mathbb{R}$:
+$\Omega = \{\varnothing\} \cup \{ X \subseteq \mathbb{R}\ |\ X\ \text{бесконечно} \}$
+\item Множество всевозможных объединений арифметических прогрессий:
+$A(a,b) = \{ a\cdot x + b\ |\ x \in \mathbb{Z}\}$ при $a > 0, b \in \mathbb{R}$;
+$X \in \Omega$, если $X=\varnothing$ или $X = \bigcup_i A(a_i,b_i)$. 
+%\item Множество всевозможных объединений арифметических прогрессий при $b=0$:
+%$X = \varnothing$ или $X = \bigcup_i A(a_i,0)$
+\end{enumerate}
+
+\item Непрерывной функцией называется такая, для которой прообраз открытого множества всегда открыт.
+Путём на топологическом пространстве $X$ назовём непрерывное отображение вещественного отрезка $[0,1]$ в $X$.
+Опишите пути (то есть, опишите, какие функции могли бы являться путями): (i) на $\mathbb{N}$ (с дискретной топологией);
+(ii) в топологии Зарисского.
+
+\item Связным множеством в топологическом пространстве назовём такое, которое связно как подпространство.
+Линейно связным множеством назовём такое, в котором две произвольные точки могут быть соединены путём,
+образ которого целиком лежит в множестве. Покажите, что линейно связное множество всегда связно, но связное 
+не обязательно линейно связное.
+
+\item Всегда ли непрерывным образом связного пространства является другое связное (под)пространство? Докажите или опровергните.
+
+\item Пусть дано компактное топологическое пространство. Пусть в нём непустое семейство 
+замкнутых множеств $S_i$ такое, что любое его
+конечное подмножество имеет непустое пересечение. Покажите, что тогда всё семейство имеет
+непустое пересечение. Указание: открытое множество --- это такое, дополнение которого замкнуто.
+
+\item Рассмотрим подмножество частично упорядоченного множества, и рассмотрим следующие свойства:
+(а) наличие наибольшего элемента; (б) наличие супремума;
+(в) наличие единственного максимального элемента. Всего можно рассмотреть шесть утверждений ((а) влечёт (б), 
+(а) влечёт (в), и т.п.) --- про каждое определите, выполнено ли оно в общем случае,
+и приведите либо доказательство, либо контрпример. Задача состоит из одного пункта, для получения баллов 
+все шесть утверждений должны быть разобраны.
+
+\item Покажите следующие свойства импликативных решёток:
+\begin{enumerate}
+\item (i) \emph{монотонность:} пусть $a \preceq b$ и $c \preceq d$, тогда $a + c \preceq b + d$ и $a \cdot c \preceq b \cdot d$;
+(ii) \emph{законы поглощения:} $a \cdot (a + b) = a$; $a + (a \cdot b) = a$; 
+(iii) $a \preceq b$ выполнено тогда и только тогда, когда $a \rightarrow b = 1$;
+\item (i) из $a \preceq b$ следует $b\rightarrow c \preceq a\rightarrow c$ и $c\rightarrow a \preceq c \rightarrow b$;
+ (ii) из $a \preceq b \rightarrow c$ следует $a \cdot b \preceq c$;
+\item (i) $b \preceq a \rightarrow b$ и $a \rightarrow (b \rightarrow a) = 1$;
+ (ii) $a \rightarrow b \preceq ((a \rightarrow (b \rightarrow c)) \rightarrow (a \rightarrow c))$;
+\item  (i) $a \preceq b \rightarrow a \cdot b$ и $a \rightarrow (b \rightarrow (a \cdot b)) = 1$;
+ (ii) $a \rightarrow c \preceq (b \rightarrow c) \rightarrow (a + b \rightarrow c)$
+\end{enumerate}
+
+\item Докажите, основываясь на формулах предыдущих заданий, что интуиционистское исчисление высказываний
+корректно, если в качестве модели выбрать алгебру Гейтинга.
+
+\item \emph{Подрешёткой} назовём замкнутое относительно операций $(+)$ и $(\cdot)$ подмножество элементов исходной решётки
+(отношение порядка на подрешётке --- сужение исходного отношения подрядка). 
+Покажите, что решётка дистрибутивна тогда и только тогда, когда у неё нет подрешётки, являющейся пентагоном или диамантом.
+
+\item Покажите, что на конечном множестве дистрибутивная решётка всегда импликативна. Постройте пример дистрибутивной, но не импликативной решётки.
+\item Покажите, что импликативная решётка всегда дистрибутивна, и что в дистрибутивной решётке всегда $a + (b \cdot c) = (a + b) \cdot (a + c)$.
+
+\end{enumerate}
+
+\section*{Задание №4. Модели для ИИВ}
+
+\begin{enumerate}
+\item Напомним определение: противоречивая теория --- такая, в которой доказуема любая формула. 
+Покажите, что для КИВ (а равно и для ИИВ) определение имеет следующие эквивалентные формулировки:
+(i) $\vdash\alpha\with\neg\alpha$ при некотором $\alpha$;
+(ii) $\vdash A\with\neg A$; (iii) для некоторой формулы $\alpha$ имеет место $\vdash\alpha$ и $\vdash\neg\alpha$. 
+
+Также покажите, что КИВ непротиворечиво (расшифруйте слово <<очевидно>> с первого слайда лекции).
+
+\item Напомним, что ИИВ полно относительно алгебр Гейтинга. То есть, если формула не доказуема в ИИВ, то найдётся
+алгебра Гейтинга и оценка переменных, при которой оценка формулы не равна $1$. Более того, возможно доказать, что ИИВ 
+полно в $\mathbb{R}$. Например, формула $A\vee\neg A$:
+
+$$\llbracket A \vee \neg A \rrbracket^{A := (-\infty,0)} = (-\infty,0) \cup (0,\infty) \ne \mathbb{R}$$
+
+Покажите, что следующие доказуемые в КИВ высказывания не доказуемы в ИИВ: 
+(i) обосновав их в КИВ, (ii) построив некоторое топологическое пространство $X$
+и дав значения переменным, при которых оценка высказывания не равна $1_X$, и (iii) построив опровергающую высказывания модель Крипке:
+\begin{enumerate}
+\item $\neg\neg A \rightarrow A$ \emph{(Закон снятия двойного отрицания)}
+\item $((A \rightarrow B) \rightarrow A) \rightarrow A$ \emph{(Закон Пирса)}
+\item $(A \rightarrow B) \vee (B \rightarrow C)$
+\item $(A \rightarrow B \vee \neg B) \vee (\neg A \rightarrow B \vee \neg B)$
+\item $\bigvee_{i=0,n-1} A_i \rightarrow A_{(i+1) \% n}$
+\end{enumerate}
+
+\item Существуют ли формулы, доказуемые в КИВ, но не в ИИВ, которые бы опровергались:
+\begin{enumerate}
+\item в топологии стрелки;
+\item в топологии Зарисского?
+\end{enumerate}
+
+\item Выполнены ли формулы де Моргана в интуиционистской логике? Докажите или опровергните:
+\begin{enumerate}
+\item $\alpha\vee\beta \vdash \neg(\neg\alpha\with\neg\beta)$ и $\neg(\neg\alpha\with\neg\beta) \vdash \alpha\vee\beta$
+\item $\neg\alpha\with\neg\beta \vdash \neg(\alpha\vee\beta)$ и $\neg(\alpha\vee\beta) \vdash \neg\alpha\with\neg\beta$
+\item $\alpha\rightarrow\beta \vdash \neg\alpha\vee\beta$ и $\neg\alpha\vee\beta \vdash \alpha\rightarrow\beta$
+\end{enumerate}
+
+\item Покажите, что никакие связки не выражаются друг через друга: то есть, нет такой формулы $\varphi(A,B)$ из языка 
+интуиционистской логики, не использующей связку $\star$, что $\vdash A \star B \rightarrow \varphi(A,B)$ и $\vdash\varphi(A,B) \rightarrow A \star B$.
+Покажите это для каждой связки в отдельности:
+\begin{enumerate}
+\item конъюнкция;
+\item дизъюнкция;
+\item импликация;
+\item отрицание.
+\end{enumerate}
+
+\item Покажите, что любая модель Крипке обладает свойством: для любых $W_i, W_j, \alpha$, 
+если $W_i \preceq W_j$ и $W_i \Vdash \alpha$, то $W_j \Vdash \alpha$.
+
+\item Несколько задач на упрощение структуры миров моделей Крипке.
+\begin{enumerate}
+\item Покажите, что формула опровергается моделью Крипке тогда и только тогда, когда она
+опровергается древовидной моделью Крипке.
+
+\item Верно ли, что если формула опровергается некоторой древовидной моделью Крипке (причём
+у каждой вершины не больше двух сыновей), то эту 
+древовидную модель можно достроить до полного бинарного дерева, с сохранением свойства опровержимости?
+
+\item Верно ли, что если некоторая модель Крипке опровергает некоторую формулу,
+то добавление любого мира к модели в качестве потомка к любому из узлов оставит опровержение в силе?
+\end{enumerate}
+
+\item Постройте опровержимую в ИИВ формулу, которая не может быть опровергнута моделью Крипке (ответ требуется доказать):
+\begin{enumerate}
+\item глубины 2 и меньше;
+\item глубины $n \in \mathbb{N}$ и меньше.
+\end{enumerate}
+
+\item Давайте разберёмся во взаимоотношениях различных формулировок закона исключенного третьего и подобных
+законов. Для этого определим \emph{минимальное} исчисление высказываний как ИИВ без 10 схемы аксиом.
+Заметим, что переход от $\vdash\neg\neg\alpha\rightarrow\alpha$ при всех $\alpha$ к
+$\vdash((\alpha\rightarrow\beta)\rightarrow\alpha)\rightarrow\alpha$ уже был ранее доказан 
+(закон Пирса следует из закона снятия двойного отрицания).
+
+Давайте продолжим строить кольцо:
+
+\begin{center}\tikz{
+    \node (D) at (0,0) {$\vdash\neg\neg\alpha\rightarrow\alpha$};
+    \node (P) at (4,1) {$\vdash((\alpha\rightarrow\beta)\rightarrow\alpha)\rightarrow\alpha$};
+    \node (L) at (8,0) {$\vdash\alpha\vee\neg\alpha$};
+    \draw[-stealth] (D) to [bend right=10] (P);
+    \draw[-stealth] (P) to [bend right=10] (L);
+    \draw[-stealth,dashed] (L) to [bend left=20] node[below] {если $\vdash\alpha\rightarrow\neg\alpha\rightarrow\beta$ при всех $\alpha$, $\beta$}  (D);
+}\end{center}
+
+для чего покажите, что в минимальном исчислении:
+\begin{enumerate}
+%\item Если $\vdash\neg\neg\alpha\rightarrow\alpha$ при всех $\alpha$, то
+%$\vdash((\alpha\rightarrow\beta)\rightarrow\alpha)\rightarrow\alpha$ (закон Пирса следует из закона снятия двойного отрицания).
+\item Если $\vdash((\alpha\rightarrow\beta)\rightarrow\alpha)\rightarrow\alpha$ при всех $\alpha$ и $\beta$, то
+$\vdash\alpha\vee\neg\alpha$ (закон исключённого третьего следует из закона Пирса).
+\item Если $\vdash\alpha\rightarrow\neg\alpha\rightarrow\beta$ (<<из лжи следует, что угодно>>, 
+он же \emph{принцип взрыва}) и $\vdash\alpha\vee\neg\alpha$ при всех $\alpha$ и $\beta$, то $\vdash\neg\neg\alpha\rightarrow\alpha$.
+\item Из закона Пирса не следует закон снятия двойного отрицания и из закона исключённого третьего не следует закон Пирса.
+\item Закон Пирса и принцип взрыва независимы (невозможно доказать один из другого).
+\end{enumerate}
+
+\begin{comment}
+\item Покажите аналог теоремы о дедукции для естественного вывода: $\Gamma,\alpha\vdash\beta$ тогда и только тогда, когда
+$\Gamma\vdash\alpha\rightarrow\beta$.
+
+
+\item Определим отображение между языками вывода (гильбертов и естественный вывод): 
+
+\begin{tabular}{ll}
+$|\varphi|_\text{е}=\left\{\begin{array}{ll} |\alpha|_\text{е}\star|\beta|_\text{е}, & \varphi = \alpha\star\beta\\
+                                              |\alpha|_\text{е}\rightarrow\bot, & \varphi = \neg\alpha\\
+                                              X, & \varphi = X\end{array}\right.$
+&
+$|\varphi|_\text{г}=\left\{\begin{array}{ll} |\alpha|_\text{г}\star|\beta|_\text{г}, & \varphi = \alpha\star\beta\\
+                                              A\with\neg A, & \varphi = \bot\\
+                                              X, & \varphi = X\end{array}\right.$
+\end{tabular}
+
+\begin{enumerate}
+\item Покажите, что $\vdash_\text{е}\alpha$ влечёт $\vdash_\text{г}|\alpha|_\text{г}$;
+\item Покажите, что $\vdash_\text{г}\alpha$ влечёт $\vdash_\text{е}|\alpha|_\text{е}$.
+\end{enumerate} 
+
+\item Классическое исчисление высказываний также можно сформулировать в стиле естественного вывода, заменив правило исключения лжи на такое:
+$$\infer[(\text{удал}\neg\neg)]{\Gamma\vdash\varphi}{\Gamma,\varphi\rightarrow\bot\vdash\bot}$$
+
+В этом задании будем обозначать через $\Gamma\vdash_\text{к}\varphi$ тот факт, что формула $\varphi$ выводится из контекста
+$\Gamma$ в классическом И.В. в варианте естественного вывода.
+
+\begin{enumerate}
+\item Покажите, что если $\vdash_\text{к}\varphi$ и $A_1, \dots, A_n$ --- все
+пропозициональные переменные из $\varphi$, то\\$\vdash_\text{е} A_1 \vee \neg A_1 \rightarrow A_2 \vee \neg A_2 \rightarrow \dots \rightarrow A_n \vee \neg A_n \rightarrow \varphi$.
+
+\item Покажите теорему Гливенко: если $\vdash_\text{к} \varphi$, то $\vdash_\text{е} \neg\neg\varphi$.
+\end{enumerate}
+\end{comment}
+\end{enumerate}
+
+\section*{Задание №5. Исчисление предикатов}
+
+\begin{enumerate}
+\item Покажите теорему Гливенко: в КИВ/ИИВ, если $\vdash_\text{к} \varphi$, то $\vdash_\text{и} \neg\neg\varphi$. А также покажите
+\emph{Следствие:} ИИВ противоречиво тогда и только тогда, когда противоречиво КИВ.
+\item Докажите (или опровергните) следующие формулы в исчислении предикатов:
+\begin{enumerate}
+\item $(\forall x.\phi)\rightarrow (\forall y.\phi[x := y])$, если есть свобода для подстановки $y$ вместо $x$ в $\phi$ и $y$ не входит свободно в $\phi$.
+\item $(\forall x.\phi)\rightarrow (\exists x.\phi)$ и $(\forall x.\forall x.\phi) \rightarrow (\forall x.\phi)$
+\item $(\forall x.\phi) \rightarrow (\neg \exists x.\neg \phi)$ и $(\exists x.\neg\phi) \rightarrow (\neg \forall x.\phi)$
+\item $(\forall x.\alpha\vee\beta) \rightarrow (\neg \exists x.\neg \alpha) \with (\neg \exists x.\neg\beta)$
+\item $((\forall x.\alpha) \vee (\forall y.\beta)) \rightarrow \forall x.\forall y.\alpha\vee\beta$. Какие условия
+надо наложить на переменные и формулы? Приведите контрпримеры, поясняющие необходимость условий.
+\item $(\alpha\rightarrow\beta) \rightarrow \forall x.(\alpha\rightarrow\beta)$. Возможно, нужно наложить
+какие-то условия на переменные и формулы? Приведите контрпримеры, поясняющие необходимость условий (если 
+условия требуются).
+\item $(\alpha \rightarrow \forall x.\beta) \rightarrow (\forall x.\alpha\rightarrow\beta)$ при условии, что $x$ не входит свободно в $\alpha$.
+\end{enumerate}
+
+\item Опровергните формулы $\phi\rightarrow\forall x.\phi$ и $(\exists x.\phi)\rightarrow (\forall x.\phi)$
+
+\item Докажите или опровергните (каждую формулу в отдельности): $(\forall x.\exists y.\phi) \rightarrow (\exists y.\forall x.\phi)$ и
+$(\exists x.\forall y.\phi) \rightarrow (\forall y.\exists x.\phi)$;
+\item Докажите или опровергните (каждую формулу в отдельности): $(\forall x.\exists y.\phi) \rightarrow (\exists x.\forall y.\phi)$ и
+$(\exists x.\forall y.\phi) \rightarrow (\forall x.\exists y.\phi)$
+
+\item Рассмотрим интуиционистское исчисление предикатов (добавим схемы аксиом и правила вывода с кванторами
+поверх интуиционистского исчисления высказываний).
+\begin{enumerate}
+\item Определим модель для исчисления предикатов. Пусть $\langle X, \Omega\rangle$ --- некоторое топологическое
+пространство. Возможно ли рассмотреть $V = \Omega$ (как и в исчислении высказываний),
+пропозициональные связки определить аналогично топологической интерпретации И.И.В., 
+оценки же кванторов сделать такими:
+$$\llbracket \forall x.\varphi \rrbracket = \left(\bigcap_{v \in D} \llbracket \varphi \rrbracket^{x := v}\right)^\circ,\quad
+  \llbracket \exists x.\varphi \rrbracket = \bigcup_{v \in D} \llbracket \varphi \rrbracket^{x := v}$$
+
+\item Покажите, что в интуиционистском исчислении предикатов теорема Гливенко не имеет места
+(а именно, существует формула $\alpha$, что $\vdash_\text{к}\alpha$, но $\not\vdash_\text{и}\neg\neg\alpha$).
+\item Определим операцию $(\cdot)_\text{Ku}$:
+$$(\varphi\star\psi)_\text{Ku} = \varphi_\text{Ku} \star \psi_\text{Ku}, \quad 
+(\forall x.\varphi)_\text{Ku} = \forall x.\neg\neg\varphi_\text{Ku}, \quad
+(\exists x.\varphi)_\text{Ku} = \exists x.\varphi_\text{Ku}$$
+
+Тогда \emph{преобразованием Куроды} формулы $\varphi$ назовём $\neg\neg(\varphi_\text{Ku})$. 
+Покажите, что $\vdash_\text{к}\alpha$ тогда и только тогда, когда $\vdash_\text{и}\neg\neg(\alpha_\text{Ku})$.
+\end{enumerate}
+
+\item Покажите, что исчисление предикатов не полно в моделях ограниченной конечной мощности. 
+А именно, пусть дана модель $\mathcal{M} = \langle D, F, T, E \rangle$. 
+Назовём мощностью модели мощность её предметного множества: $|\mathcal{M}| = |D|$.
+Покажите, что для любой конечной мощности модели $n\in\mathbb{N}$ найдётся такая формула $\alpha$, что 
+при $|\mathcal{M}|\le n$ выполнено $\llbracket\alpha\rrbracket_\mathcal{M} = \text{И}$, но $\not\vdash\alpha$.
+\end{enumerate}
+
+\begin{comment}
+\section*{Задание №6. Исчисление предикатов, нормальный вывод}
+
+До сих пор мы записывали доказательства в так называемом гильбертовском стиле (много аксиом, немного правил, 
+доказательство есть последовательность высказываний).
+В этом задании вам будет предложено доказывать утверждения с помощью естественного (натурального) вывода.
+Формулы языка ИП (секвенции) имеют вид: $\Gamma\vdash\alpha$ (гипотезы явно включаются в формулу).
+Вывод записывается в виде дерева, узлы в котором (правила вывода) имеют вид: 
+$$\quad\quad\quad\infer[(\text{аннотация})]{\text{заключение}}{\text{посылка 1}\quad\quad\text{посылка 2}\quad\quad\dots}$$
+
+Имеют место следующие правила вывода:
+
+$$\infer[\text{Аксиома}]{\Gamma,\alpha\vdash\alpha}{\vphantom{\Gamma}}$$ 
+
+Правила для импликации:
+
+$$\infer[\text{Введ}\rightarrow]{\Gamma\vdash\alpha\rightarrow\beta}{\Gamma,\alpha\vdash\beta}\quad\quad
+     \infer[\text{Удал}\rightarrow]{\Gamma\vdash\beta}{\Gamma\vdash\alpha\quad\Gamma\vdash\alpha\rightarrow\beta}$$
+
+Правила для конъюнкции:
+
+$$\infer[\text{Введ}\with]{\Gamma\vdash\alpha\with\beta}{\Gamma\vdash\alpha\quad\quad\Gamma\vdash\beta}\quad\quad
+\infer[\text{Удал}\with]{\Gamma\vdash\alpha}{\Gamma\vdash\alpha\with\beta}\quad\quad
+\infer[\text{Удал}\with]{\Gamma\vdash\beta}{\Gamma\vdash\alpha\with\beta}$$
+
+Правила для дизъюнкции:
+
+$$\infer[\text{Введ}\vee]{\Gamma\vdash\alpha\vee\beta}{\Gamma\vdash\alpha}\quad\quad
+\infer[\text{Введ}\vee]{\Gamma\vdash\alpha\vee\beta}{\Gamma\vdash\beta}\quad\quad
+\infer[\text{Удал}\vee]{\Gamma\vdash\gamma}{\Gamma\vdash\alpha\rightarrow\gamma\quad\Gamma\vdash\beta\rightarrow\gamma\quad\Gamma\vdash\alpha\vee\beta}$$
+
+Правило снятия двойного отрицания:
+$$\infer[\text{Удал}\neg\neg]{\Gamma\vdash\alpha}{\Gamma,\alpha\rightarrow\bot\vdash\bot}$$
+
+Правила введения кванторов:
+$$\infer[x\notin FV(\Gamma)]{\Gamma\vdash\forall x.\alpha}{\Gamma\vdash\alpha}\quad\quad
+  \infer[\theta\text{ свободен для подстановки}]{\Gamma\vdash\exists x.\alpha}{\Gamma\vdash\alpha[x := \theta]}
+$$
+
+Правила удаления кванторов:
+$$\infer[\theta\text{ свободен для подстановки}]{\Gamma\vdash\alpha[x := \theta]}{\Gamma\vdash\forall x.\alpha}\quad\quad
+  \infer[x\notin FV(\Gamma,\beta)]{\Gamma\vdash\beta}{\Gamma\vdash\exists x.\alpha\quad\quad\Gamma,\alpha\vdash\beta}
+$$
+
+Пример доказательства:
+$$\infer[(\text{введ}\with)]{A\with B\vdash B \with A}{\infer[(\text{удал}\with)]{A \with B \vdash B}{\infer[(\text{акс.})]{A \with B\vdash A \with B}{}}
+                                           \quad\quad\infer[(\text{удал}\with)]{A \with B \vdash A}{\infer[(\text{акс.})]{A \with B\vdash A \with B}{}}}$$
+
+По аналогии с исчислением с ложью, можем естественным образом определить преобразования формул
+из языка исчисления предикатов в гильбертовском стиле (т.е. с отрицанием) в нормальный вывод (т.е. с ложью) --- и обратно. Будем записывать это
+как $|\cdot|_\neg$ и $|\cdot|_\bot$
+
+Докажите следущюие формулы (по умолчанию предполагается выводимость в стиле натурального вывода):
+
+\begin{enumerate}
+\item Докажите, что если $\alpha$ выводимо в гипотезах $\gamma_1, \dots, \gamma_k$ в ИП гильбертовского типа, то
+имеет место $|\gamma_1|_\bot, \dots, |\gamma_n|_\bot \vdash |\alpha|_\bot$.
+\item Докажите, что если $\gamma_1,\dots,\gamma_n\vdash\alpha$, то $|\alpha|_\neg$ выводимо в гипотезах 
+$|\gamma_1|_\bot,\dots,|\gamma_n|_\bot\vdash|\alpha|_\bot$ в ИП гильбертовского типа.
+\item $\alpha\rightarrow\beta,\forall x.\beta\rightarrow\gamma \vdash \forall x.\alpha\rightarrow\gamma$
+%\item $\forall x.\alpha \vdash (\exists x.\alpha\rightarrow\bot)\rightarrow\bot$
+%и наоборот: $(\forall x.\alpha\rightarrow\bot)\rightarrow\bot\vdash\exists x.\alpha$
+%\item (докажите или опровергните) $\forall x.\exists y.\varphi \vdash \exists y.\forall x.\varphi$ 
+%и $\exists y.\forall x.\varphi\vdash\forall x.\exists y.\varphi$
+\end{enumerate}
+
+%\end{comment}
+\end{enumerate}
+\end{comment}
+
+\section*{Задание №6-7. Теоремы об исчислении предикатов, аксиоматика Пеано, формальная арифметика.}
+\begin{enumerate}
+\item Пусть $M$ --- непротиворечивое множество формул и $\mathcal{M}$ --- построенная в соответствии с теоремой о 
+полноте исчисления предикатов оценка для $M$. Мы ожидаем, что $\mathcal{M}$ будет моделью для $M$, для чего было необходимо доказать
+несколько утверждений. Восполните некоторые пробелы в том доказательстве. А именно, если $\varphi$ --- 
+некоторая формула и для любой формулы $\zeta$, более короткой, чем $\varphi$, выполнено
+$\mathcal{M}\models\zeta$ тогда и только тогда, когда $\zeta\in M$, тогда покажите:
+\begin{enumerate}
+\item если $\varphi \equiv \alpha\vee\beta$, $\mathcal{M}\models\alpha\vee\beta$, то $\alpha\vee\beta\in M$; и если $\mathcal{M}\not\models\alpha\vee\beta$, то $\alpha\vee\beta\notin M$;
+\item если $\varphi \equiv \neg\alpha$, $\mathcal{M}\models\neg\alpha$, то $\neg\alpha\in M$; и если $\mathcal{M}\not\models\neg\alpha$, то $\neg\alpha\notin M$.
+\end{enumerate}
+
+\item 
+Напомним, что \emph{машиной Тьюринга} называется упорядоченная шестёрка $$\langle A_\text{внешн}, A_\text{внутр}, T, \varepsilon, s_\text{нач}, s_\text{доп}\rangle$$
+где внешний и внутренний алфавиты конечны и не пересекаются ($A_\text{внешн} \cap A_\text{внутр} = \varnothing$), $\varepsilon \in A_\text{внешн}$, $s_\text{нач}, s_\text{доп} \in A_\text{внутр}$, 
+и $T$ --- это функция переходов: $T : A_\text{внутр} \times A_\text{внешн} \rightarrow A_\text{внутр} \times A_\text{внешн} \times \{ \leftarrow, \rightarrow, \cdot \}$.
+
+Все неиспользованные клетки ленты заполнены $\varepsilon$, головка перед запуском стоит на самой левой заполненной клетке.
+При работе машина последовательно выполняет переходы и двигает ленту (в соответствии с $T$), пока не окажется в 
+допускающем состоянии $s_\text{доп}$ (успешное завершение). Также можно выделить отвергающее состояние $s_\text{отв}$, 
+оказавшись в котором, машина оканчивает работу с ошибкой (неуспешное завершение).
+
+Например, пусть $A_\text{внешн} = \{ 0, 1, \varepsilon \}$, $A_\text{внутр} = \{s_s, s_f\}$, $s_\text{нач} = s_s$, $s_\text{доп} = s_f$,
+отвергающего состояния не задано, и функция переходов указана в таблице ниже:
+
+\begin{center}\begin{tabular}{c|ccc}
+    & $\varepsilon$ & 0 & 1\\\hline
+$s_s$ & $\langle s_f,\varepsilon,\cdot\rangle$ & $\langle s_s,1,\rightarrow\rangle$ & $\langle s_s,0,\rightarrow\rangle$\\
+$s_f$ & $\langle s_f,\varepsilon,\cdot\rangle$ & $\langle s_f,0,\cdot\rangle$ & $\langle s_f,1,\cdot\rangle$
+\end{tabular}\end{center}
+
+Такая машина Тьюринга меняет на ленте все 0 на 1, а все 1 --- на 0. Например, для строки $011$:
+
+$$\underline{0}11 \Rightarrow 1\underline{1}1 \Rightarrow 10\underline{1} \Rightarrow 100\underline{\varepsilon}$$
+
+Заметьте, что на последнем шаге головка сдвинулась вправо, за заполненные клетки --- оказавшись на неиспользованной, заполненной символами $\varepsilon$
+части ленты --- и остановилась благодаря 
+тому, что $T(s_s, \varepsilon) = \langle s_f, \dots \rangle$.
+
+Напишите следующие программы для машины Тьюринга и продемонстрируйте их работу на каком-нибудь эмуляторе:
+\begin{enumerate}
+\item разворачивающую строку в алфавите $\{0,1\}$ в обратном порядке (например, из $01110111$ программа должна сделать $11101110$);
+в этом и в последующих заданиях в алфавит внешних символов при необходимости можно добавить дополнительные символы;
+\item в строке в алфавите $\{0,1,2\}$ сокращающую все <<постоянные>> подстроки до одного символа:
+машина должна превратить $1022220101111$ в $1020101$;
+\item допускающую правильные скобочные записи (например, $(())$ должно допускаться, а $)()($ --- отвергаться);
+\item допускающую строки вида $a^nb^nc^n$ в алфавите $\{a,b,c\}$ (например, строка $aabbcc$ должна допускаться, а $abbbc$ --- отвергаться);
+\item складывающую два числа на ленте, записанные в двоичной системе счисления через разделитель (знак плюса);
+\item допускающую только строки, состоящие из констант и импликаций (алфавит $\{ 0, 1, \rightarrow, (, ) \}$), 
+содержащие истинные логические выражения;
+например, выражение $(((0 \rightarrow 1) \rightarrow 0) \rightarrow 0)$ машина должна допустить, а
+выражение $((1 \rightarrow 1) \rightarrow 0)$ --- отвергнуть. Можно считать, что выражение написано в корректном синтаксисе (все скобки корректно
+расставлены, никаких скобок не пропущено).
+\end{enumerate}
+
+\item Пусть дано число $k \in \mathbb{N}$. Известно, что если $0 \le k < 2^n$, то возможно закодировать $k$ с помощью $n$ цифр 0 и 1.
+А как закодировать число, если мы не знаем верхней границы $n$? Какую лучшую асимптотику длины кодировки относительно $\log_2 k$ вы можете
+предложить? Кодировка должна использовать только символы 0 и 1, также код должен быть префиксным (ни один код не является префиксом другого).
+
+\item Как известно, машина Тьюринга может быть проинтерпретирована другой машиной Тьюринга.
+Предложите способ закодировать машину Тьюринга в виде текста в алфавите $\{0,1\}$.
+Естественно, символы алфавитов при кодировке меняются на их номера, и эти номера надо будет как-то записывать в виде последовательностей цифр 0 и 1.
+
+\item Рассмотрим аксиоматику Пеано. 
+Пусть $$a^b = \left\{\begin{array}{ll}1,& b= 0 \\a^c\cdot a,&b = c'\end{array}\right.$$
+Докажите, что:
+\begin{enumerate}
+\item $a \cdot b = b \cdot a$
+\item $(a + b) \cdot c = a \cdot c + b \cdot c$
+\item $a^{b+c} = a^b \cdot a^c$
+\item $(a^b)^c = a^{b \cdot c}$
+\item $(a + b) + c = a + (b + c)$
+\end{enumerate}
+
+\item Определим отношение <<меньше или равно>> так: $0 \le a$ и $a' \le b'$, если $a \le b$. Докажите, что:
+\begin{enumerate}
+\item $x \le x+y$;
+\item $x \le x \cdot y$ (укажите, когда это так --- в остальных случаях приведите контрпримеры);
+\item Если $a \le b$ и $m \le n$, то $a \cdot m \le b \cdot n$;
+\item $x \le y$ тогда и только тогда, когда существует $n$, что $x + n = y$;
+\item Будем говорить, что $a$ делится на $b$ с остатком, если существуют такие $p$ и $q$, что 
+$a = b \cdot p + q$ и $0 \le q < b$. Покажите, что $p$ и $q$ всегда существуют и единственны,
+если $b > 0$.
+\end{enumerate}
+
+\item Определим <<ограниченное вычитание>>: $$a \dotminus b = \left\{\begin{array}{ll}0, & a = 0\\a, & b = 0\\p \dotminus q, & a = p', b = q'\end{array}\right.$$
+Докажите, что:
+\begin{enumerate}
+\item $a + b \dotminus b = a$;
+\item $(a \dotminus b) \cdot c = a \cdot c \dotminus b \cdot c$;
+\item $a \dotminus b \le a + b$;
+\item $a \dotminus b = 0$ тогда и только тогда, когда $a \le b$.
+\end{enumerate}
+
+\begin{comment}
+\item Обозначим за $\overline{n}$ представление числа $n$ в формальной арифметике: %, по сути это ноль с $n$ штрихами:
+
+$$\overline{n} = \left\{\begin{array}{ll}0, &n = 0\\
+           \left(\overline{k}\right)', & n=k+1\end{array}\right.$$
+
+Например, $\overline{5} = 0'''''$. Докажите в формальной арифметике:
+\begin{enumerate}
+\item $\vdash \overline{2} \cdot \overline{3} = \overline{6}$;
+\item $\vdash \forall p.(\exists q.q' = p) \vee p = 0$ (единственность нуля);
+\item $\vdash p \cdot q = 0 \rightarrow p = 0 \vee q = 0$ (отсутствие делителей нуля);
+\end{enumerate}
+\end{comment}
+\end{enumerate}
+
+\section*{Задание №8. Рекурсивные функции. Выразимость и представимость.}
+\begin{enumerate}
+
+\item Обозначим за $\overline{n}$ представление числа $n$ в формальной арифметике: %, по сути это ноль с $n$ штрихами:
+
+$$\overline{n} = \left\{\begin{array}{ll}0, &n = 0\\
+           \left(\overline{k}\right)', & n=k+1\end{array}\right.$$
+
+Например, $\overline{5} = 0'''''$. Докажите в формальной арифметике:
+\begin{enumerate}
+\item $\vdash \overline{2} + \overline{2} = \overline{4}$;
+\item $\vdash a + 0 = 0 + a$;
+\item $\vdash a + b = b + a$;
+\item $\vdash \forall p.(\exists q.q' = p) \vee p = 0$ (единственность нуля);
+\item $\vdash p \cdot q = 0 \rightarrow p = 0 \vee q = 0$ (отсутствие делителей нуля);
+\end{enumerate}
+
+\item Будем говорить, что $k$-местное отношение $R$ выразимо в формальной арифметике,
+если существует формула формальной арифметики $\rho$ со свободными переменными $x_1, \dots, x_k$, что:
+\begin{itemize}
+\item для всех $\langle a_1, \dots, a_k \rangle \in R$ выполнено $\vdash\rho[x_1 := \overline{a_1}]\dots[x_k := \overline{a_k}]$
+(доказуема формула $\rho$ с подставленными значениями $a_1, \dots, a_k$ вместо свободных переменных $x_1, \dots, x_k$);
+\item для всех $\langle a_1, \dots, a_k \rangle \notin R$ выполнено $\vdash\neg\rho[x_1 := \overline{a_1}]\dots[x_k := \overline{a_k}]$.
+\end{itemize}
+
+Выразите в формальной арифметике (укажите формулу $\rho$ и докажите требуемые свойства про неё):
+\begin{enumerate}
+\item <<пустое>> отношение $R = \varnothing$ (никакие два числа не состоят в отношении);
+\item двуместное отношение <<хотя бы один из аргументов равен 0>>.
+\item одноместное отношение <<аргумент меньше 3>>.
+\end{enumerate}
+
+\item С использованием эмулятора рекурсивных функций (применённый на лекции синтаксис
+подсказывает использование библиотеки на С++, но вы можете выбрать любой другой способ эмуляции),
+покажите, что следующие функции примитивно-рекурсивны. Ваше решение должно быть продемонстрировано
+в работе на простых примерах. Возможно, при реализации сложных функций вам потребуется 
+для ускорения работы заменить базовые функции на <<нативные>> (например, умножение, реализованное
+через примитивы, заменить на встроенную операцию) --- это можно делать при условии, что для них у вас есть 
+эквивалентная примитивно-рекурсивная реализация.
+\begin{enumerate}
+\item умножение и ограниченное вычитание;
+\item сравнение: $$\textsc{le}(x,y)=\left\{\begin{array}{ll}1,&x \le y\\0,&x > y\end{array}\right.$$
+\item факториал;
+\item целочисленное деление и остаток от деления;
+\item извлечение квадратного корня (на лекции речь шла только о рекурсивности квадратного корня);
+\item функции построения упорядоченной пары и взятия её проекций; в решении используйте представление пары натуральных
+чисел $\langle a,b\rangle$ через диагональную нумерацию:
+
+\begin{center}\begin{tabular}{r|ccccc}
+a\textbackslash{}b & 0 & 1 & 2 & 3 & \dots\\\hline
+  0                & 0 & 2 & 5 & 9 \\
+  1                & 1 & 4 & 8 & 13  \\
+  2                & 3 & 7 & 12 & 18   \\
+  3                & 6 & 11 & 17 & 24\\
+  \dots
+\end{tabular}\end{center}
+\item вычисление $n$-го простого числа (напомним теорему Бертрана-Чебышёва: для любого натурального $n \ge 2$ найдётся
+простое число между $n$ и $2n$);
+\item частичный логарифм $\textsc{plog}_n(k) = \max\{p\ |\ k\ \raisebox{-0.5ex}{\vdots}\ n^p\}$ (например, $\textsc{plog}_2(96)=5$);
+\item вычисление длины списка в гёделевой нумерации (например, $\textsc{len}(3796875000) = \textsc{len}(2^3\cdot 3^5\cdot 5^9) = 3$);
+\item выделение подсписка из списка (например, $\textsc{sublist}(2^2 \cdot 3^3 \cdot 5^4 \cdot 7^5, 2, 2) = 2^4 \cdot 3^5$);
+\item склейка двух списков в гёделевой нумерации (например, $\textsc{append}(2^3 \cdot 3^5,2^7 \cdot 3^6) = 2^3 \cdot 3^5 \cdot 5^7 \cdot 7^6$).
+\item проверка парности скобок: дана строка из скобок в гёделевой нумерацией, верните 1, если скобки парные и 0 иначе (например, 
+$\textsc{ispaired}(2^{\ulcorner ( \urcorner} \cdot 3^{\ulcorner ( \urcorner} \cdot 5^{\ulcorner ) \urcorner}) = 0$,
+но $\textsc{ispaired}(1944) = 1$)
+\end{enumerate}
+
+\item С использованием эмулятора рекурсивных функций покажите, что функция Аккермана --- рекурсивная.
+
+\item Пусть $n$-местное отношение $R$ выразимо в формальной арифметике. Покажите, что
+тогда его характеристическая функция $C_R$ представима в формальной арифметике:
+$$C_R(\overrightarrow{x}) = \left\{\begin{array}{ll}1,& \overrightarrow{x}\in R\\0, &\text{иначе}\end{array}\right.$$
+
+\item Покажите, что в определении представимости пункт
+$\vdash\neg\varphi(\overline{x_1},\dots,\overline{x_n},\overline{y})$ при $f(x_1,\dots,x_n) \ne y$ не является
+обязательным и может быть доказан из остальных пунктов определения представимой функции.
+
+\item Покажите, что функция $f(x) = x+2$ представима в формальной арифметике (в ответе также требуется привести все пропущенные
+на лекции выводы в формальной арифметике).
+\end{enumerate}
+
+\section*{Задание №9. Теоремы о неполноте арифметики.}
+\begin{enumerate}
+\item Покажите, что омега-непротиворечивая теория непротиворечива.
+\item Пусть $\zeta_\varphi(x) := \forall z.\sigma (x,x,z) \rightarrow \varphi(z)$,
+где формула $\sigma(p,q,r)$ представляет функцию $\textsc{SUBST}(p,q)$, заменяющую в формуле с гёделевым номером $p$
+все свободные переменные $x_1$ на формулу $q$. Тогда покажите, что формулу $\alpha_\varphi := \zeta_\varphi(\overline{\ulcorner\zeta_\varphi\urcorner})$
+можно взять в качестве формулы $\alpha$ в лемме об автоссылках: $\vdash \varphi(\overline{\ulcorner\alpha_\varphi\urcorner}) \leftrightarrow \alpha_\varphi$.
+
+%\item Какое из условий Гильберта-Бернайса-Лёфа нарушает формула $\pi'$?
+\item Покажите, что вопрос о принадлежности формулы $\alpha(x) = \forall p.\delta(x,p) \rightarrow \neg \sigma(p)$ в доказательстве 
+теоремы о невыразимости доказуемости к множеству $Th_\mathcal{S}$ ведёт к противоречию.
+\item Покажите, что формула $D(x)$ из доказательства теоремы о невыразимости доказуемости является представимой в формальной арифметике.
+\end{enumerate}
+
+\section*{Задание №10. Лямбда-исчисление}
+Для проверки и демонстрации заданий используйте какой-нибудь эмулятор лямбда-исчисления,
+например LCI: \url{https://www.chatzi.org/lci/}
+
+\begin{enumerate}
+\item Определите следующие функции в лямбда-исчислении. В качестве подсказки заметим, что у задач на чёрчевские
+нумералы есть отдалённое сходство с задачами на примитивно-рекурсивные функции: все функции, предложенные 
+в упражнениях, могут быть реализованы с помощью фиксированного количества циклов \verb!for! (то есть, при помощи 
+указания надлежащих функций \verb!f! в аргументах чёрчевских нумералов). Также напоминаем, что в лямбда-исчислении
+несложно выражаются упорядоченные пары и значения алгебраических типов.
+\begin{enumerate}
+\item Стрелка Пирса и Штрих Шеффера.
+\item <<Мажоритарный элемент>>, проверяющий, что большинство входных аргументов --- истина: $M(a_1,a_2,a_3) = \text{И}$, 
+если $|\{i\ |\ i=\overline{1\dots 3}, a_i = \text{И}\}| \ge 2$.
+\item \verb!If!: если первый аргумент --- истина, возвращает второй аргумент, иначе --- третий. Также \verb!IsZero!, 
+возвращающую истину, если аргумент равен 0.
+\item \verb!IsEven!: возвращает истину, если аргумент чётен, и \verb!Div3!: делит нумерал на 3 с округлением вверх.
+\item \verb!Fib!: вычисляет соответствующее число Фибоначчи.
+\item \verb!Fact!: вычисляет факториал числа.
+\item Вычисление квадратного корня числа (округление вниз).
+\item Ограниченное вычитание и сравнение двух нумералов.
+\item Деление с остатком для чёрчевских нумералов (возвращает упорядоченную пару).
+\end{enumerate}
+
+\item Найдите нормальную форму для следующих выражений (при необходимости докажите, почему она именно такова):
+\begin{enumerate}
+\item $\overline{2}\ \overline{2}$ и $\overline{2}\ \overline{2}\ \overline{2}$
+\item $\overline{2}\ \overline{2}\ \overline{2}\ \overline{2}\ \overline{2}\ \overline{2}\ \overline{2}$
+\end{enumerate}
+
+\item На лекции был приведён комбинатор неподвижной точки $Y := \lambda f.(\lambda x.f\ (x\ x))\ (\lambda x.f\ (x\ x))$, обладающий свойством
+$Y\ P =_\beta P\ (Y\ P)$ для любого терма $P$. С его помощью оказывается возможным реализовывать рекурсию.
+
+Например, зададим функцию, возводящую 2 в соответствующую степень: $$P := \lambda f.\lambda x.(IsZero\ x)\ 1\ (f\ ((Dec\ x) \cdot 2))$$
+Сравните это с кодом на Си: 
+\begin{center}\verb!unsigned f (unsigned x) { return x == 0 ? 1 : f ((x-1) * 2); }!\end{center}
+Тогда, вызванная как $Y\ P\ x$, эта функция вычислит $2^x$. Например, $Y\ P\ 1 =_\beta$
+
+\vspace{-0.3cm}
+$$\begin{array}{l}=_\beta P\ (Y\ P)\ 1 = (\lambda f.\lambda x.(IsZero\ x)\ 1\ ((Dec\ x)\cdot 2)))\ (Y\ P)\ 1 \\
+  =_\beta (IsZero\ 1)\ 1\ ((Y\ P\ (Dec\ 1)) \cdot 2))) =_\beta ((Y\ P\ 0) \cdot 2 \\
+  =_\beta (P\ (Y\ P)\ 0) \cdot 2 \\
+  =_\beta (IsZero\ 0)\ 1\ ((Y\ P\ (Dec\ 0)) \cdot 2))) \cdot 2\\
+  =_\beta 1 \cdot 2 =_\beta 2\end{array}$$
+
+С помощью $Y$-комбинатора, реализуйте:
+\begin{enumerate}
+\item Функцию Аккермана.
+\item Вычисление $k$-го простого числа.
+\end{enumerate}
+
+\item Напомним, что список может быть задан с помощью алгебраического типа с двумя конструкторами, \verb!Nil! и \verb!Cons!
+(см. доказательство неразрешимости исчисления предикатов). С учётом этого знания, и с учётом представления 
+алгебраических типов, приведённого на лекции, реализуйте следующие конструкции:
+\begin{enumerate}
+\item Список первых шести цифр числа $\pi$.
+\item Функцию, вычисляющую длину списка.
+\item Функцию высшего порядка \verb!fold!.
+\end{enumerate}
+
+\item Напомним определение:
+$$\begin{array}{l}
+S := \lambda x.\lambda y.\lambda z.x\ z\ (y\ z)\\
+K := \lambda x.\lambda y.x\\
+I := \lambda x.x
+\end{array}$$
+
+Известна теорема о том, что для любого комбинатора $X$ можно найти выражение $P$
+(состоящее только из скобок, пробелов и комбинаторов $S$ и $K$), что $X =_\beta P$.
+Будем говорить, что комбинатор $P$ \emph{выражает} комбинатор $X$ в базисе $SK$.
+
+Выразите в базисе $SK$:
+\begin{enumerate}
+\item $F := \lambda x.\lambda y.y$
+\item $\overline{1}$
+\item $\lambda x.x\ x$ (а также $\Omega$)
+\item $InR$
+\end{enumerate}
+
+\item По аналогии с импликативным фрагментом ИИВ, мы можем рассмотреть полное просто типизированное лямбда-исчисление,
+в котором добавить конструкции для упорядоченной пары (конъюнкции), алгебраического типа (дизъюнкции) и необитаемого типа (лжи).
+
+Правила для конъюнкции:
+
+$$\infer[\text{Конструктор пары}]{\Gamma\vdash\langle A,B\rangle : \alpha\with\beta}{\Gamma\vdash A:\alpha\quad\quad\Gamma\vdash B:\beta}$$
+$$\infer[\text{Левая проекция}]{\Gamma\vdash \pi_L P:\alpha}{\Gamma\vdash P : \alpha\with\beta}\quad\quad
+\infer[\text{Правая проекция}]{\Gamma\vdash \pi_R P:\beta}{\Gamma\vdash P : \alpha\with\beta}$$
+
+Правила для дизъюнкции:
+
+$$\infer[\text{Левая инъекция}]{\Gamma\vdash In_L A : \alpha\vee\beta}{\Gamma\vdash A:\alpha}\quad\quad
+\infer[\text{Правая инъекция}]{\Gamma\vdash In_R B : \alpha\vee\beta}{\Gamma\vdash B:\beta}$$
+$$\infer[\text{Сопоставление с образцом}]{\Gamma\vdash \text{Case}\ L\ R\ D : \gamma}{\Gamma\vdash L : \alpha\rightarrow\gamma\quad\Gamma\vdash R: \beta\rightarrow\gamma\quad \Gamma\vdash D:\alpha\vee\beta}$$
+
+Правило для лжи:
+
+$$\infer{\Gamma\vdash \text{absurd\ }E:\alpha}{\Gamma\vdash E:\bot}$$
+
+Постройте натуральный вывод для следующих утверждений, а также постройте соответствующее в смысле изоморфизма Карри-Ховарда 
+лямбда-выражение (и докажите его тип):
+\begin{enumerate}
+\item Карринг: $(\alpha\with\beta\rightarrow\gamma)\leftrightarrow(\alpha\rightarrow\beta\rightarrow\gamma)$
+\item $(\alpha\vee\beta\rightarrow\gamma)\leftrightarrow(\alpha\rightarrow\gamma)\with(\beta\rightarrow\gamma)$
+\item $((\alpha\rightarrow\bot)\vee\beta)\rightarrow(\alpha\rightarrow\beta)$
+\end{enumerate}
+
+\item Покажите, что в отличии от бета-редуцируемости, для бета-редукции не выполнена теорема Чёрча-Россера
+(рефлексивность и транзитивность отношения для теоремы существенна).
+А именно, существует такое лямбда-выражение $T$, что $T \rightarrow_\beta A$, $T \rightarrow_\beta B$,
+$A \ne B$, но нет $S$, что $A \rightarrow_\beta S$ и $B \rightarrow_\beta S$.
+\item Рассмотрим комбинаторы $Y$ и $\Omega := (\lambda x.x\ x)\ (\lambda x.x\ x)$.
+\begin{enumerate} 
+\item Покажите, что если $\vdash A : \alpha$, то любое подвыражение $A$ также имеет тип.
+\item Покажите, что $Y$ и $\Omega$ не имеют типа в просто-типизированном лямбда-исчислении.
+\item Выразите их в языке Хаскель (Окамль). Каковы их типы?
+\end{enumerate}
+
+
+\item Пусть фиксирован тип чёрчевского нумерала, это $(\alpha\rightarrow\alpha)\rightarrow(\alpha\rightarrow\alpha)$.
+Найдите выражения и их тип в просто-типизированном лямбда-исчислении (и докажите наличие этого типа) для следующих выражений.
+
+Возможно, вам в этом поможет язык Хаскель: определим на языке Хаскель следующую функцию: \verb!show_church n = show (n (+1) 0)!.
+Легко заметить, что \verb!show_church (\f -> \x -> f (f x))! вернёт 2. Как вы думаете, какой у выражения \verb!\f -> \x -> f (f x))! тип?
+
+\begin{enumerate}
+\item Инкремент чёрчевского нумерала --- то есть, докажите, что
+$\vdash \lambda n.\lambda f.\lambda x.n\ f\ (f\ x) : \eta\rightarrow\eta$, 
+где $\eta = (\alpha\rightarrow\alpha)\rightarrow(\alpha\rightarrow\alpha)$.
+\item Сложение двух чёрчевских нумералов;
+\item Умножение двух чёрчевских нумералов (не каждая реализация умножения подойдёт).
+\end{enumerate}
+
+
+\item Найдите необитаемый тип в просто-типизированном лямбда-исчислении: такой $\tau$, что $\not\vdash A : \tau$ ни 
+для какого $A$. Напомним, что в базовом варианте исчисления тип --- это либо константа, либо функция из типа в тип; 
+другие связки, в частности ложь, конъюнкция, дизъюнкция, в базовый набор типов просто-типизированного исчисления не входят.
+
+\item Напомним, что в одном выражении может быть более одного бета-редекса. Назовём порядок редукции \emph{нормальным},
+если всегда вычисляется тот бета-редекс, первый символ которого стоит левее всего в строке. \emph{Аппликативным}
+порядком назовём такой, при котором вычисляется самый левый из наиболее вложенных редексов. 
+Например, в выражении $$\dotuline{(\lambda x.x)\ \dashuline{((\lambda n.\lambda f.\lambda x.n\ f\ (f\ x))\ \lambda f.\lambda.x.x)}}$$
+точками подчёркнут редекс для нормального порядка, а прерывистой линией --- для аппликативного.
+
+Интуитивно в нормальном порядке
+сперва вычисляется тело функции, а параметры вычисляются потом, по мере надобности. Аппликативный же порядок
+предполагает обязательное вычисление параметров перед вычислением самой функции.
+
+Известна теорема о том, что если у выражения в принципе существует нормальная форма, то она может быть получена
+путём применения нормального порядка редукции.
+
+Обычно в языках программирования применяется аппликативный порядок редукции, однако,
+в (практически) любом языке конструкция \verb!if! вычисляется с помощью нормального порядка, поскольку условный оператор
+вычисляет только одну из веток (\verb!then! или \verb!else!). 
+
+Предложите лямбда-выражение, количество редукций которого до нормальной формы различается более чем в $n$ раз при применении
+нормального и аппликативного порядков (по заданному заранее $n$).
+\end{enumerate}
+
+
+\section*{Задание №11. Теория множеств.}
+\begin{enumerate}
+\item Задайте полный порядок на $\mathbb{Z}$ и на $\mathbb{Q}$. Стандартный порядок на вещественных числах не
+является полным, хотя некоторые его подмножества этим порядком вполне упорядочиваются (натуральные числа).
+Вполне ли упорядочены вещественные корни квадратных уравнений с натуральными коэффициентами (как подмножество $\mathbb{R}$)?
+\item Является ли порядок на алгебре Линденбаума полным? Если нет, то какие подмножества алгебры Линденбаума
+являются вполне упорядоченными?
+\item Пусть заданы списки (в любом языке программирования) $L(\alpha)$, хранящие значения типа $\alpha$.
+Реализуйте следующие функции, являющиеся аналогами конструктивных аксиом теории множеств:
+\begin{itemize}
+\item $\texttt{empty}: L(\alpha)$, строит пустой список.
+\item $\texttt{pair}: (\alpha, \alpha) \rightarrow L(\alpha)$, формирует список из двух своих аргументов.
+\item $\texttt{flatten}: L(L(\alpha)) \rightarrow L(\alpha)$, соединяет все списки внутри списка в один.
+\item $\texttt{powerset}: L(\alpha) \rightarrow L(L(\alpha))$, делает из списка список всех возможных подсписков.
+\item $\texttt{filter}: (\alpha \rightarrow \texttt{bool}) \rightarrow L(\alpha) \rightarrow L(\alpha)$,
+выделяет из списка все элементы, соответствующие условию.
+\end{itemize}
+Данное задание не разбивается на пункты.
+\item Определим упорядоченную пару $\langle a,b\rangle := \{\{a\},\{a,b\}\}$. Покажите, что
+$\langle a,b \rangle = \langle c,d\rangle$ тогда и только тогда, когда $a = c$ и $b = d$.
+\item Докажите, что следующие конструкции являются множествами, также предложите их реализацию в смысле п.3: 
+\begin{enumerate}
+\item пересечение всех элементов множества ($\bigcap a$);
+\item $a\ \setminus\ b$ (разность множеств) и $a\ \triangle\ b$ (симметрическую разность множеств);
+\item $a \uplus b$ (дизъюнктное объединение множеств: $\{\langle x,0\rangle\mid x\in a\}\cup\{\langle x,1\rangle\mid x\in b\}$);
+\item $a \times b$ (декартово произведение множеств: $\{\langle p,q\rangle\ |\ p\in a, q\in b\}$);
+\item $\times a$ (прямое произведение дизъюнктного множества $a$).
+\end{enumerate}
+\item Определите формулу $\varphi(x)$ для свойства <<$x$ --- конечный ординал>>. Укажите замкнутый
+вид для формулы, задающей ординал $\omega$.
+\item Давайте докажем некоторые свойства ординалов.
+\begin{enumerate}
+\item Предъявите примеры (i) транзитивного, но не вполне упорядоченного отношением $\in$ множества и (ii) вполне упорядоченного,
+но не транзитивного множества (задание не делится на пункты). Покажите, что ваши примеры --- действительно множества в смысле аксиоматики ZF.
+\item Покажите, что если $x$ --- ординал, то $x'$ --- тоже ординал.
+\item Верно ли, что если $x'$ --- ординал, то $x$ --- тоже ординал?
+\item Покажите, что любой непустой ординал содержит пустое множество.
+\item Покажите, что если $x \in p$ и $p$ --- ординал, то либо $x' = p$, либо $x' \in p$.
+\item Покажите, что если $x$ и $y$ --- конечные ординалы, то $x = y$, $x \in y$ или $y \in x$ (не используйте аксиому выбора
+и следующую из неё аналогичную теорему с лекции ).
+%\item Покажите, что если $x$ --- конечный ординал, то $x = \varnothing^{(n)}$ (пустое с $n$ штрихами) для некоторого $n \in \mathbb{N}_0$. 
+\end{enumerate}
+%\item Пусть задано множество $s$, каждый элемент которого --- ординал. Покажите, что множество $\sup s$ с упомянутыми на 
+%лекции свойствами существует и является ординалом.
+%\item На лекции были приведены формулы для суммы, произведения и возведения в степень ординалов. Однако, не было приведено
+%доказательства, что множества, соответствующие формулам, существуют. Восполните этот пробел.
+\item Покажите, что аксиома фундирования запрещает существование такого множества $x$, что $x \in x$.
+\item Покажите, что на множестве $\omega$ выполняется аксиоматика Пеано (полная формализация рассуждений не требуется,
+но из изложения должно быть понятно, как эту формализацию в рамках теории первого порядка получить):
+\begin{enumerate}
+\item $\forall x.x \in \omega \rightarrow \neg x' = \varnothing$
+\item $\forall x.\forall y.x \in \omega \with y \in \omega \rightarrow x' = y' \rightarrow x = y$
+\item (\emph{указание к следующему пункту}) покажите, что если $\vdash\forall x.\neg\phi(x)\rightarrow A\with\neg A$, то $\vdash\forall x.\phi(x)$.
+\item Если $\phi(\varnothing)$ и $\forall x.x \in \omega \rightarrow \phi(x) \rightarrow \phi(x')$, 
+то $\forall x.x \in \omega \rightarrow \phi(x)$.
+\end{enumerate}
+\item Проверьте следующие равенства (докажите или опровергните):
+\begin{enumerate}
+\item $\omega\cdot\overline{2} = \overline{2}\cdot\omega$
+\item $\omega\cdot\overline{2} = \omega + \omega$
+\item $(\omega+\overline{1})^{\overline{2}} = \omega^{\overline{2}} + \overline{2}\cdot \omega + \overline{1}$
+\item $\omega ^ \omega = (\omega ^ {\overline{2}}) ^ \omega$
+\item $\omega ^ {\omega + \overline{1}} = \omega ^ \omega + \overline{1}$
+\item Имеет ли место ассоциативность сложения и/или умножения?
+\end{enumerate}
+\item Верно ли, что $1^\omega = \omega$ и/или $\omega^1 = \omega$?
+\item Рассмотрим все конечные двоичные деревья без значений в вершинах и узлах, и зададим лексикографический порядок на них:
+листья друг другу равны, лист всегда меньше узла, узлы упорядочены лексикографически своими потомками 
+(сравниваем левых сыновей, если равны --- то правых). Является ли это полным порядком, если да, то какое порядковое число 
+соответствует этому упорядочению?
+\item Зачёт за пункт ставится, если одновременно решены два подпункта:
+(i) Покажите, что множество $\omega^\omega$ имеет счётную мощность (здесь: имеется биекция на $\omega$, возможно, не 
+сохраняющая порядок). 
+(ii) Определим $\uparrow k$ (башню из омег) так:
+
+$$\uparrow k = \left\{\begin{array}{ll}\omega,&k = 1\\\omega^{\uparrow n},&k = n'\end{array}\right.$$
+
+Скажем, $\uparrow 3 = \omega^{\left(\omega^\omega\right)}$. Будет ли счётным ординал $\sup\{\uparrow k\ |\ k \in \omega\}$?
+\end{enumerate}
+
+\section*{Задание №12. Мощность множеств.}
+
+\begin{enumerate}
+\item Внимательным читателем было замечено, что определение $\sup$ для ординалов имеет некоторые неочевидные следствия.
+Давайте разберёмся в этом понятии подробнее.
+Определим два варианта ординального супремума. Пусть $X$ --- множество ординалов, тогда $\underline{\sup} X = \bigcup X$ и 
+$\overline{\sup} X = \min \{ V\ |\ X \subseteq V,\ V \text{ --- ординал} \}$. На практике применяются оба, поэтому давайте 
+в обоих и разберёмся.
+\begin{enumerate}
+\item Покажите, что $\underline{\sup} X = \bigcup X$ --- ординал, если каждый элемент $X$ --- ординал. Не забывайте, что
+рассуждение по индукции по числу элементов в $X$ не подойдёт.
+\item Чему равно $\underline{\sup}\,7$ и $\overline{\sup}\,7$, и вообще, $\underline{\sup}X$ и $\overline{\sup}X$ при $X$, 
+состоящем из конечного числа конечных ординалов? 
+Как эти значения соотносятся с $\sup_\omega X$ (супремум множества $X$ относительно универсума $\omega$, упорядоченного отношением $\in$)?
+\item Покажите, что $\overline{\sup} X$ существует и корректно определено в ZF --- укажите одну или несколько формул (возможно, с выбором вариантов), 
+задающих это значение в явном виде.
+\item Покажите, что $\underline{\sup} X = \overline{\sup} X$, если $X$ не имеет максимума --- и $\underline{\sup} X \ne \overline{\sup} X$, если имеет.
+\item Определим операции сложения и умножения ординалов с помощью $\underline{\sup}$ и с помощью $\overline{\sup}$ для случая предельных ординалов.
+То есть, $\overline{0\cdot\omega} = \overline{\sup}\{0 \cdot x\ |\ x \in \omega\}$, либо $\underline{0\cdot\omega} = \underline{\sup}\{0 \cdot x\ |\ x \in \omega\}$.
+Верно ли, что $\overline{0\cdot\omega} = \overline{\omega\cdot 0}$, а также $\underline{0\cdot\omega} = \underline{\omega\cdot 0}$. 
+Предъявите доказательства или контрпример.
+\item При каких $a,b$ выполнено $\underline{a \cdot b} = \overline{a \cdot b}$?
+\item Определим сложение ординалов как порядковое число для вполне упорядоченного множества, полученного
+путём присоединения одного ординала после другого: $|\alpha \uplus \beta|$, причём будем считать, что при всех $a \in \alpha$ и
+$b \in \beta$ выполнено $In_L\ a<In_R\ b$ (заметьте, речь идёт не о мощности, а о порядковом числе, поэтому мы доопределяем порядок). 
+То есть, $2 + 2 = |2 \uplus 2| = |In_L\ 0, In_L\ 1, In_R\ 0, In_R\ 1| = 4$. 
+Есть ли отличия такого определения от определения через $\overline{sup}$ и $\underline{sup}$?
+\item Аналогично можно определить умножение ординалов --- через порядковое число лексикографи\-чес\-ки-упорядоченного декартового
+произведения. Что вы можете сказать про соотношение этого порядкового числа и определений через $\sup$?
+\end{enumerate}
+\item Рассмотрим следующую теорию первого порядка и её модель $\mathcal{M}$ при $D = \mathbb{R}$. В ней мы зададим один нелогический
+двуместный предикатный символ $B$ и константу $0$. Никаких нелогических
+аксиом мы не задаём. Модель $\mathcal{M}$ имеет $D = \mathbb{R}$.
+Название $B$ --- от выражения <<Because I can!>>, поскольку в $\mathcal{M}$ только $B(\pi,e)$ истинно, а при других параметрах предикат ложен.
+Значение 0 задано естественно: $\llbracket 0 \rrbracket_\mathcal{M} = 0$. Заметим, что $\models_\mathcal{M} \exists p.\exists q.B(p,q)$.
+Применените к этой теории теорему Сколема-Лёвенгейма, опишите, какие множества $D_n$ будут построены, и покажите, 
+какая счётная модель получится.
+\item Покажите следующее (обозначим за $\mathcal{F}(p,q)$ множество функций из $p$ в $q$):
+\begin{enumerate}
+\item $|a|=0$ тогда и только тогда, когда $a = \varnothing$;
+\item если $|a|\le|b|$, то $|\mathcal{F}(g,a)| \le |\mathcal{F}(g,b)|$;
+\item если $|a|\le|b|$ и $\overline{0}<|g|$, то $|\mathcal{F}(a,g)| \le |\mathcal{F}(b,g)|$;
+\item $|\mathcal{F}(\overline{0},a)| = \overline{1}$, $|\mathcal{F}(a,\overline{1})| = \overline{1}$; если $|a| > 0$, то $|\mathcal{F}(a,\overline{0})| = \overline{0}$;
+\item если $|a|\ge\aleph_0$ и $0 < |n| < \aleph_0$, то $|\mathcal{F}(n,a)| = a$.
+\end{enumerate}
+\item Покажите эквивалентность следующих определений конечного множества (задание $(k)$ предполагает доказательство
+импликации $(k)\rightarrow(k')$; возможно, некоторые из переходов потребуют аксиому выбора):
+\begin{enumerate}
+\item $a$ конечно, если каждое непустое семейство подмножеств $a$ имеет максимальный по включению элемент.
+Например, при $a = \{0,1,2\}$ в семействе подмножеств $\{\varnothing,\{0,1\},\{1,2\}\}$ элементы $\{0,1\}$ и $\{1,2\}$ --- максимальны.
+\item $a$ конечно, если $\mathcal{P}(a)$ не равномощно своему собственному подмножеству (собственное подмножество --- подмножество, не совпадающее с множеством).
+\item $a$ конечно, если оно не равномощно своему собственному подмножеству.
+\item $a$ конечно, если $|a|=\varnothing$ или $|a|\cdot\overline{2} > |a|$.
+\item $a$ конечно, если $|a|=\varnothing$ или $|a|=\overline{1}$ или $|a|^2 > |a|$.
+\item $a$ конечно, если $|a|<\aleph_0$.
+\end{enumerate}
+\item Покажите, что представимая функция $f: a \rightarrow b$ биективна (т.е. инъективна и сюръективна) тогда и только тогда,
+когда $\forall y.\exists!x.\phi(x,y)$. Здесь за $\phi(x,y)$ мы обозначаем формулу, представляющую функцию $f$
+в теории множеств, по аналогии с формальной арифметикой.
+\item Покажите в ZFC, что если $a$ и $b$ --- непустые множества, то существует функция из $a$ в $b$ 
+(однако функция не обязана быть инъективной или сюръективной).
+
+\item Фильтром $\mathcal{F}$ назовём структуру на элементах некоторой решётки $\langle L, (\preceq) \rangle$ со следующими свойствами:
+\begin{itemize}
+\item $0 \notin \mathcal{F}$;
+\item если $a,b \in \mathcal{F}$, то $a \cdot b \in \mathcal{F}$;
+\item если $a \in \mathcal{F}$, $a \preceq b$, $b \in L$, то $b \in \mathcal{F}$.
+\end{itemize}
+
+Фильтр назовём главным для $x \in L$, если $\mathcal{F} = \{ a\in L\ |\ x \preceq a \}$.
+Фильтр $\mathcal{F'}$ назовём собственным подфильтром $\mathcal{F}$, если $\mathcal{F'} \subset \mathcal{F}$.
+Фильтр назовём ультрафильтром, если он не является собственным подфильтром никакого фильтра на $L$.
+
+\begin{enumerate}
+\item Покажите, что главный фильтр для $x \in L$ является ультрафильтром.
+\item Покажите, что множество дополнений конечных множеств до бесконечного образует фильтр (в качестве отношения порядка рассмотрим
+отношение включения). Является ли этот фильтр ультрафильтром?
+\item Покажите, что для ультрафильтра $F$ на булевой алгебре $L$ и $x \in L$ выполнено $x \in F$ или $\sim x \in F$. Также покажите,
+что полное непротиворечивое множество формул образует ультрафильтр.
+\item Покажите, что у любого фильтра есть содержащий его ультрафильтр (вам потребуется лемма Цорна для доказательства этого факта).
+\end{enumerate}
+\item Покажите, что у любых двух множеств $A$ и $B$ их мощности сравнимы ($|A| \le |B|$ или $|B| \le |A|$).
+Для доказательства вам потребуется один из вариантов аксиомы выбора.
+\item Покажите, что мощность множества всех непрерывных функций $\mathbb{R}\rightarrow\mathbb{R}$ --- $\beth_1$.
+\item Покажите, что мощность множества всех функций $\mathbb{N}\rightarrow\mathbb{N}$ --- также $\beth_1$.
+
+\end{enumerate}
+
+\section*{Задание №13. Теорема о непротиворечивости формальной арифметики}
+\begin{enumerate}
+\item Приведите пример наследственного подмножества $\mathbb{R}$, не совпадающего со всем $\mathbb{R}$ (это возможно в силу
+отсутствия полного порядка на $\mathbb{R}$).
+\item Покажите, что если $\vdash_\infty\neg(\alpha\vee\neg\alpha)$, то $\vdash_\infty 1=0$.
+\item Покажите $\vdash_\infty\forall a.\forall b.a + b = b + a$.
+\item Пусть $a\ \vdots\ b := \neg\forall x.\neg b \cdot x = a$. Покажите, что $\vdash_\infty (a\ \vdots\ b)\rightarrow (b\ \vdots\ c) \rightarrow (a\ \vdots\ c)$.
+%\item Постройте утверждение, доказательство которого не может иметь порядок, меньший $\omega$.
+%\item Покажите, что если $\vdash_\infty\alpha$ и $\vdash_\infty\neg\alpha\vee\beta$, то $\vdash_\infty\beta$ 
+%(правило Modus Ponens --- источник появления сечений в перенесённых доказательствах из формальной арифметики).
+\item Разберите самостоятельно случай теоремы об уменьшении степени сечения, когда секущая формула --- дизъюнкция.
+\end{enumerate}
+
+\section*{Задание №14. Метод резолюций}
+\begin{enumerate}
+\item Постройте универсум Эрбрана для аксиомы индукции при $\varphi:=\exists y.P(x,y)$: 
+$$(\exists y.P(0,y))\with(\forall x.(\exists y.P(x,y))\rightarrow\exists y.P(x',y))\rightarrow\exists y.P(x,y)$$
+Напомним, что универсум Эрбрана строится для формулы в ДНФ после сколемизации.
+\item Рассмотрим множество дизъюнктов исчисления высказываний $S$. 
+Обозначим шаг применения правила резолюции всеми возможными способами к дизъюнктам 
+множества $S$ как операцию $\mathcal{R}(S)$. Положим $S_0 = S$, $S_{n+1} = S_n \cup \mathcal{R}(S_n)$ и $S' = \cup S_i$.
+\begin{enumerate}
+\item Покажите, что $S'$ противоречиво (то есть для любой интерпретации $M$ найдутся значения для
+свободных переменных $d_1,\dots,d_k$ и дизъюнкт $\delta \in S'$, что $M \not\models \delta[x_1 := d_1,\dots,x_k:=d_k]$)
+тогда и только тогда, когда $S$ противоречиво.
+\item Покажите, что для формул исчисления высказываний $S'$ конечно при конечном $S$.
+\item Покажите, что если $S$ противоречиво, то в $S'$ обязательно найдутся дизъюнкты с явным противоречием ($\beta$ и $\neg\beta$).
+\end{enumerate}
+\item Покажите, что если $J = \{\delta_1,\neg\delta_2\}$ и $\delta_1$ явно противоречит $\neg\delta_2$ при некоторой подстановке
+свободных переменных (то есть, $\sigma(\delta_1) = \sigma(\delta_2)$), то $J$ также противоречива.
+\item В данном задании будет необходимо проверить выводимость утверждений в исчислении предикатов с помощью метода резолюций.
+Продемонстрируем метод на простом примере. Докажем $(\forall x.P(x))\rightarrow P(0)$.
+\begin{itemize}
+\item Возьмём отрицание: $\neg((\exists x.\neg P(x)) \vee P(0))$, то есть $\neg \exists x.\neg P(x) \vee P(0)$,
+то есть $\forall x.P(x) \with \neg P(0)$
+\item Проведём сколемизацию и переведём в ДНФ: $\{P(x),\neg P(0)\}$ при свободной переменной $x$ (по которой имеется
+неявный квантор всеобщности).
+\item Применяем правило резолюции:
+$$\infer[\pi = \mathcal{U}\big[{(P(x'),P(0)\big]}]{\Box}{P(x)\quad\neg P(0)}$$
+\item Получили пустой дизъюнкт (то есть явное противоречие), формула доказана.
+\end{itemize}
+Убедитесь с помощью метода резолюций, что:
+\begin{enumerate}
+\item $(\forall x.P(x)) \rightarrow (\exists x.P(x))$
+\item $(\forall x.E(x,f(x))) \rightarrow (\forall x.\exists y.E(x,y))$
+\item $(\forall x.P(x) \rightarrow P(f(x))) \with P(0) \rightarrow P(f(f(f(0))))$
+\end{enumerate}
+\item В правиле резолюции к ответу применяются унифицирующая подстановка $\pi$ 
+и подстановки $\sigma_1$ и $\sigma_2$, заменяющие переменные в дизъюнктах на свежие. 
+Покажите, что эти подстановки важны. А именно:
+\begin{enumerate}
+\item Предложите непротиворечивый набор дизъюнтков, из которого можно вывести противоречие
+методом резолюции, если в правиле резолюции не применять $\pi$ к результату. Правило, иллюстрирующее проблему:
+$$\infer[\pi = {\mathcal{U}\big[ \beta_1, \beta_2 \big]}]{\varphi\vee\psi}{\varphi\vee\beta_1\quad\neg\beta_2\vee\psi}$$
+\item Предложите противоречивый набор дизъюнтков, из которого не получится вывести противоречие,
+если в правиле резолюции не применять $\sigma_1$/$\sigma_2$ к результату.
+Правило, иллюстрирующее проблему:
+$$\infer[\pi = {\mathcal{U}\big[ \beta_1, \beta_2 \big]}]{\pi(\varphi\vee\psi)}{\varphi\vee\beta_1\quad\neg\beta_2\vee\psi}$$
+\end{enumerate}
+\item Покажите, что семейство $S$ непротиворечиво тогда и только тогда, когда $S$ с добавленным 
+применением правила резолюции для исчисления предикатов также непротиворечиво.
+\item Продемонстрируйте, как будет вести себя метод резолюций на следующем примере:
+$\forall x.P(x) \rightarrow P(f(x))$
+\item Можно ли проверить аксиому индукции с помощью метода резолюций? То есть, закончится ли процесс 
+применения правила резолюций к отрицанию аксиомы получением противоречия?
+\end{enumerate}
+
+
+\end{document}
